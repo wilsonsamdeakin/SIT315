@@ -1,0 +1,42 @@
+
+//number of motion sensor and LED pin
+const uint8_t motionSensor = 2;
+const uint8_t LED_PIN = 13;
+
+// variable for reading  motion sensor and LED status 
+uint8_t motionSensorState = LOW;
+uint8_t motionSensorPrevState = LOW;
+uint8_t ledState = LOW;
+
+//initiliase variables and set data rate
+void setup()
+{
+  // initialise motion sensor as input
+  pinMode(motionSensor, INPUT_PULLUP);
+  // initialise LED pin as output
+  pinMode(LED_PIN, OUTPUT);
+  // opens serial port, sets data rate to 9600 bps
+  Serial.begin(9600);    
+}
+
+void loop()
+{
+  // read state of motionsensor 
+  uint8_t motionSensorState = digitalRead(motionSensor); 
+  
+  //Check if motion detected and turn on LED if motion status on
+   if(motionSensorState != motionSensorPrevState)
+  {
+    ledState = !ledState;
+    digitalWrite(LED_PIN, ledState);
+  }
+  
+  motionSensorPrevState = motionSensorState;
+  
+  //prints states of motion sensor and LED
+  Serial.print("motionSensorState: ");
+  Serial.print(motionSensorState);
+  Serial.print(" ledState: ");
+  Serial.print(ledState);
+  Serial.println("");
+}

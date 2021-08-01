@@ -1,0 +1,52 @@
+
+//number of pushbutton and LED pin
+const uint8_t motionSensor = 2;
+const uint8_t MS_LED_PIN = 13;
+const uint8_t tiltSensor = 3;
+const uint8_t TS_LED_PIN = 9;
+
+// variable for reading pushbutton and LED status 
+uint8_t motionState = LOW;
+uint8_t tiltState = LOW;
+
+//initiliase variables and set data rate
+void setup()
+{
+  // initialise motion sensor as input
+  pinMode(motionSensor, INPUT);
+  pinMode(MS_LED_PIN, OUTPUT);
+  // initialise LED pin as output
+  pinMode(tiltSensor, INPUT_PULLUP);
+  pinMode(TS_LED_PIN, OUTPUT);
+  // opens serial port, sets data rate to 9600 bps
+  Serial.begin(9600);  
+  //Interrupt Function when motion detected is pressed
+  attachInterrupt(digitalPinToInterrupt(motionSensor), turnOnMS, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(tiltSensor), turnOnTS, CHANGE);
+
+}
+
+void loop()
+{
+	delay(200);
+}
+
+void turnOnMS()
+{
+  //Invert ledState
+  motionState = !motionState;
+  Serial.println("Motion detected!");
+  //output ledState to LED_PIN
+  digitalWrite(MS_LED_PIN, motionState);
+  Serial.println("Motion LED!");
+}
+
+void turnOnTS()
+{
+   //Invert ledState
+  tiltState = !tiltState;
+  Serial.println("Tilt detected!");
+  //output ledState to LED_PIN
+  digitalWrite(TS_LED_PIN, tiltState);
+  Serial.println("Tilt LED");
+}
